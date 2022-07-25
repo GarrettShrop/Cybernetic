@@ -12,7 +12,7 @@ module.exports = {
 	name: 'messageCreate',
 	execute(messageCreate) {
         if (messageCreate.author.bot) return;
-        if (messageCreate.content.includes('cybernetic'|| 'Cybernetic') || speaker == messageCreate.author){
+        if (messageCreate.content.includes('cybernetic')||messageCreate.content.includes('Cybernetic') || speaker == messageCreate.author){
             speaker = messageCreate.author;
             messageCreate.content.replace('cybernetic','');
         prompt += `You: ${messageCreate.content}\n`;
