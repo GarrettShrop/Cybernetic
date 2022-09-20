@@ -15,7 +15,7 @@ module.exports = {
         if (messageCreate.author.bot) return;
         if (messageCreate.content.includes('cybernetic')||messageCreate.content.includes('Cybernetic') || speaker.includes(messageCreate.author)){
             if(!speaker.includes(messageCreate.author)){
-                speaker.append(messageCreate.author);
+                speaker.push(messageCreate.author);
             }
             if(finishers.includes(messageCreate.content.toLowerCase())) {
                 for(var i = 0; i < speaker.length;i++){
