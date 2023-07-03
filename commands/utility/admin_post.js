@@ -45,7 +45,7 @@ module.exports = {
 				.setColor(type === 'patchnotes' ? '#0099ff' : '#ff0000');
 			// Different color for different types
 
-			await channel.send({ embeds: [embed] });
+			await channel.send({ content:'@here', embeds: [embed] });
 			await interaction.reply('Message sent.');
 		}
 		catch (error) {
