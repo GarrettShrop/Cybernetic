@@ -33,7 +33,7 @@ module.exports = {
 		}
 		catch (error) {
 			console.log(error);
-			await interaction.editReplyreply('There was a error fetching the data :(');
+			await interaction.editReply('There was a error fetching the data :(');
 		}
 	},
 };
