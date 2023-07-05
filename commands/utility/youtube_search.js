@@ -28,7 +28,7 @@ module.exports = {
 			const data = await response.json();
 			const videoIds = data.items.slice(0, num).map(item => item.id.videoId);
 			const videoUrls = videoIds.map(id => `https://www.youtube.com/watch?v=${id}`);
-			interaction.editReply({ content: `Here are the Top 3 videos I found for you:\n${videoUrls.join('\n')}`, ephemeral: true });
+			interaction.editReply({ content: `Here are the Top ${num} videos I found for you:\n${videoUrls.join('\n')}`, ephemeral: true });
 
 		}
 		catch (error) {
