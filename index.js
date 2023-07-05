@@ -10,8 +10,7 @@ db.query('SELECT * FROM users;', [])
 	})
 	.catch(e => console.error(e.stack));
 
-
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers] });
 
 client.commands = new Collection();
 const foldersPath = path.join(__dirname, 'commands');
@@ -44,6 +43,14 @@ for (const file of eventFiles) {
 	else {
 		client.on(event.name, (...args) => event.execute(...args));
 	}
+}
+
+const tasksPath = path.join(__dirname, 'scheduled-tasks');
+const taskFiles = fs.readdirSync(tasksPath).filter(file => file.endsWith('.js'));
+
+for (const file of taskFiles) {
+	const filePath = path.join(tasksPath, file);
+	require(filePath);
 }
 
 // Login to Discord with your client's token
