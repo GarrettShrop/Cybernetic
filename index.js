@@ -2,6 +2,13 @@ require('dotenv').config();
 const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
+const db = require('./database/database');
+
+db.query('SELECT * FROM users;', [])
+	.then(res => {
+		console.log(res.rows);
+	})
+	.catch(e => console.error(e.stack));
 
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
