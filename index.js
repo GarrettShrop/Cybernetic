@@ -50,7 +50,7 @@ const taskFiles = fs.readdirSync(tasksPath).filter(file => file.endsWith('.js'))
 
 for (const file of taskFiles) {
 	const filePath = path.join(tasksPath, file);
-	require(filePath);
+	require(filePath)(client);
 }
 
 // Login to Discord with your client's token

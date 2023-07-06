@@ -1,4 +1,4 @@
-const { Client, EmbedBuilder } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 const cron = require('node-cron');
 const fetch = require('node-fetch');
 require('dotenv').config();
@@ -17,24 +17,26 @@ async function fetchImage() {
 }
 
 // This will run every day at 8AM Los Angeles Time
-cron.schedule('0 8 * * *', async () => {
-	const client = new Client();
-	try {
-		const channel = client.channels.cache.get('1125415504144764970');
-		const quote = await fetchQuote();
-		const image_url = await fetchImage();
-		const embed = new EmbedBuilder()
-			.setDescription(quote)
-			.setImage(image_url);
+module.exports = function(client) {
+	cron.schedule('0 8 * * *', async () => {
+		try {
+			const channel = client.channels.cache.get('1125415504144764970');
+			const quote = await fetchQuote();
+			const image_url = await fetchImage();
+			const embed = new EmbedBuilder()
+				.setDescription(quote)
+				.setImage(image_url);
 
-		channel.send({ content: '@here', embeds: [embed] });
-	}
-	catch (error) {
-		console.log(error);
-		const channel_error = client.channels.cache.get('1000839085302235270');
-		channel_error.send('Error sending message');
-	}
-}, {
-	scheduled: true,
-	timezone: 'America/Los_Angeles',
-});
+			channel.send({ content: '@here', embeds: [embed] });
+		}
+		catch (error) {
+			console.log(error);
+			const channel_error = client.channels.cache.get('1000839085302235270');
+			channel_error.send('Error sending message');
+		}
+	}, {
+		scheduled: true,
+		timezone: 'America/Los_Angeles',
+	});
+};
+
