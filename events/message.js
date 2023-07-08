@@ -20,6 +20,8 @@ module.exports = {
 		db.query('SELECT * FROM users WHERE discord_id = $1', [message.author.id])
 			.then(res => {
 				if (res.rows.length === 0) {
+					console.log('Inside if statement for user not in database and updating points');
+
 					// The user does not exist in our database yet, let's insert them.
 					// Note: This doesn't handle roles, rank, and left_at as their values are not clear from this context
 					db.query('INSERT INTO users (discord_id, username, discriminator, join_date, points) VALUES ($1, $2, $3, $4, $5)',
@@ -28,6 +30,7 @@ module.exports = {
 				}
 				else {
 					// The user exists, let's update their points.
+					console.log('Inside else statement for user in database and updating points');
 					db.query('UPDATE users SET points = points + 1 WHERE discord_id = $1', [message.author.id])
 						.catch(e => console.error(e.stack));
 				}

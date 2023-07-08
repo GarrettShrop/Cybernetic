@@ -2,7 +2,7 @@ require('dotenv').config();
 const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
-const db = require('./database/database');
+const db = require('./database/database.js');
 
 db.query('SELECT * FROM users;', [])
 	.then(res => {
