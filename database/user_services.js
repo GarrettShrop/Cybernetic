@@ -15,6 +15,39 @@ const addUserToDB = async (discord_id, username, discriminator, join_date) => {
 	}
 };
 
+const updateUserInDB = async (discord_id, xp, points) => {
+	try {
+		const query = `
+        UPDATE users
+        SET xp = xp + $2, points = points + $3, last_message = CURRENT_TIMESTAMP
+        WHERE discord_id = $1;
+		`;
+		const values = [discord_id, xp, points];
+		await db.query(query, values);
+	}
+	catch (error) {
+		console.error(`Error updating user ${discord_id} in the database:`, error);
+	}
+};
+
+const loadUserFromDB = async (discord_id) => {
+
+	const query = `
+    SELECT * FROM users WHERE discord_id = $1;
+        `;
+	const values = [discord_id];
+	try {
+		const result = await db.query(query, values);
+		return result.rows[0];
+	}
+	catch (error) {
+		console.error(`Error Loading user ${discord_id} from the database:`, error);
+	}
+};
+
+
 module.exports = {
 	addUserToDB,
+	updateUserInDB,
+	loadUserFromDB,
 };
