@@ -45,9 +45,25 @@ const loadUserFromDB = async (discord_id) => {
 	}
 };
 
+const updateRankInDB = async (discord_id, rank) => {
+	try {
+		const query = `
+        UPDATE users
+        SET rank = $2
+        WHERE discord_id = $1;
+        `;
+		const values = [discord_id, rank];
+		await db.query(query, values);
+	}
+	catch (error) {
+		console.error(`Error updating user rank ${discord_id} in the database:`, error);
+	}
+};
+
 
 module.exports = {
 	addUserToDB,
 	updateUserInDB,
 	loadUserFromDB,
+	updateRankInDB,
 };

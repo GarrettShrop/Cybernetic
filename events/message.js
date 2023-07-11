@@ -1,5 +1,6 @@
 require('dotenv').config();
-const { loadUserFromDB, updateUserInDB } = require('../database/user_services.js');
+const { loadUserFromDB, updateUserInDB, updateRankInDB } = require('../database/user_services.js');
+const { updateRole, xpBrackets, roles } = require('../discord-operations/discord_utils');
 const OpenAI = require('openai-api');
 const openai = new OpenAI(process.env.OPENAI_API_KEY);
 const speaker = [];
@@ -46,9 +47,26 @@ module.exports = {
 
 			// If the user sent a message yesterday, give them a bonus
 			if (lastMessageDate.getDate() === today.getDate() - 1 && lastMessageDate.getMonth() === today.getMonth() && lastMessageDate.getFullYear() === today.getFullYear()) {
-				console.log('Giving user a bonus for regualr messages');
+				console.log('Giving user a bonus for regular messages');
 				pointGain += 10, xpGain = 20;
 				await updateUserInDB(message.author.id, xpGain, pointGain);
+			}
+
+			const userafterXP = await loadUserFromDB(message.author.id);
+			const xp = userafterXP.xp;
+			let newRoleName;
+			for (let i = xpBrackets.length - 1; i >= 0; i--) {
+				if (xp >= xpBrackets[i]) {
+					newRoleName = roles[i];
+					break;
+				}
+			}
+
+			if (newRoleName) {
+				await updateRole(message.member, newRoleName);
+				if (newRoleName !== userafterXP.rank) {
+					await updateRankInDB(message.author.id, newRoleName);
+				}
 			}
 
 
