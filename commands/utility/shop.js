@@ -17,7 +17,7 @@ module.exports = {
 					{ name: '1v1 Rocket League Match against garretts46', value: 'Have a match against the legendary garretts46! Cost: 3000 points', inline: false },
 					{ name: 'VIP Role', value: 'Access to VIP-only channels, unique reactions, and highlighted messages. Cost: 5000 points', inline: false },
 					{ name: 'Custom Role', value: 'Create a custom role with a name of your choice. Cost: 7000 points', inline: false },
-					{ name: 'Discord Nitro for 1 month', value: 'Gifted a Discord Nitro subscription for 1 month. Cost: 10000 points', inline: false },
+					{ name: 'Discord Nitro for 1 month', value: 'Gifted a Discord Nitro subscription for 1 month. Cost: 20000 points', inline: false },
 				);
 			await interaction.editReply({ embeds: [embed] });
 		}

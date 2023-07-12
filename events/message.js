@@ -1,6 +1,5 @@
 require('dotenv').config();
-const { loadUserFromDB, updateUserInDB, updateRankInDB } = require('../database/user_services.js');
-const { updateRole, xpBrackets, roles } = require('../discord-operations/discord_utils');
+const { loadUserFromDB, updateUserInDB, updateLastMessageDateInDB } = require('../database/user_services.js');
 const OpenAI = require('openai-api');
 const openai = new OpenAI(process.env.OPENAI_API_KEY);
 const speaker = [];
@@ -31,6 +30,17 @@ module.exports = {
 			let xpGain = 10;
 			let pointGain = 1;
 
+			// Load the user's info from the database
+			const user = await loadUserFromDB(message.author.id);
+			const lastMessageDate = user.last_message;
+			const today = new Date();
+			const now = new Date();
+
+			if (lastMessageDate && now.getTime() - lastMessageDate.getTime() < 30 * 1000) {
+				// If it hasn't been 30 seconds, return without updating the user's XP
+				return;
+			}
+
 			if (message.content.includes(dailyTopic)) {
 				console.log('users message does contain the daily topic');
 				await updateUserInDB(message.author.id, xpGain + 10, pointGain + 2);
@@ -40,34 +50,15 @@ module.exports = {
 				await updateUserInDB(message.author.id, xpGain, pointGain);
 			}
 
-			// Load the user's info from the database
-			const user = await loadUserFromDB(message.author.id);
-			const lastMessageDate = user.last_message;
-			const today = new Date();
-
 			// If the user sent a message yesterday, give them a bonus
 			if (lastMessageDate.getDate() === today.getDate() - 1 && lastMessageDate.getMonth() === today.getMonth() && lastMessageDate.getFullYear() === today.getFullYear()) {
-				console.log('Giving user a bonus for regular messages');
+				console.log('Giving user a bonus for regualr messages');
 				pointGain += 10, xpGain = 20;
 				await updateUserInDB(message.author.id, xpGain, pointGain);
 			}
 
-			const userafterXP = await loadUserFromDB(message.author.id);
-			const xp = userafterXP.xp;
-			let newRoleName;
-			for (let i = xpBrackets.length - 1; i >= 0; i--) {
-				if (xp >= xpBrackets[i]) {
-					newRoleName = roles[i];
-					break;
-				}
-			}
-
-			if (newRoleName) {
-				await updateRole(message.member, newRoleName);
-				if (newRoleName !== userafterXP.rank) {
-					await updateRankInDB(message.author.id, newRoleName);
-				}
-			}
+			// Update the time of the user's last message
+			await updateLastMessageDateInDB(message.author.id, now);
 
 
 			// OpenAI interaction code
