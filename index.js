@@ -1,5 +1,6 @@
 require('dotenv').config();
 const fs = require('node:fs');
+const { token } = require('./settings');
 const path = require('node:path');
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
 const db = require('./database/database.js');
@@ -55,4 +56,4 @@ for (const file of taskFiles) {
 }
 
 // Login to Discord with your client's token
-client.login(process.env.BOT_TOKEN);
+client.login(token);
