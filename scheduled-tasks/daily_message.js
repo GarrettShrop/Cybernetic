@@ -2,6 +2,7 @@ const { EmbedBuilder } = require('discord.js');
 const cron = require('node-cron');
 const fetch = require('node-fetch');
 require('dotenv').config();
+const { unsplash } = require('../settings');
 
 async function fetchQuote() {
 	const response = await fetch('https://zenquotes.io/api/random');
@@ -11,7 +12,7 @@ async function fetchQuote() {
 
 async function fetchImage() {
 	// replace with your own image API call
-	const response = await fetch(`https://api.unsplash.com/photos/random/?client_id=${process.env.UNSPLASH_KEY}&orientation=landscape&query=Mountain%20background`);
+	const response = await fetch(`https://api.unsplash.com/photos/random/?client_id=${unsplash}&orientation=landscape&query=Mountain%20background`);
 	const data = await response.json();
 	return data.urls.regular;
 }

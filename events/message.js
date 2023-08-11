@@ -1,7 +1,8 @@
 require('dotenv').config();
 const { loadUserFromDB, updateUserInDB, updateLastMessageDateInDB } = require('../database/user_services.js');
 const OpenAI = require('openai-api');
-const openai = new OpenAI(process.env.OPENAI_API_KEY);
+const { openAi } = require('../settings');
+const openai = new OpenAI(openAi);
 const speaker = [];
 const finishers = ['bye', 'goodnight', 'goodbye', 'im out'];
 let prompt = `The following is a conversation with an AI assistant. The assistant is helpful, creative, clever, and very friendly.

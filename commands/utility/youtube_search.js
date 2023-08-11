@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
+const { ytAPI } = require('../../settings');
 require('dotenv').config();
 
 module.exports = {
@@ -24,7 +25,7 @@ module.exports = {
 				return;
 			}
 
-			const response = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&key=${process.env.YT_API_KEY}&type=video`);
+			const response = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&key=${ytAPI}&type=video`);
 			const data = await response.json();
 			const videoIds = data.items.slice(0, num).map(item => item.id.videoId);
 			const videoUrls = videoIds.map(id => `https://www.youtube.com/watch?v=${id}`);
